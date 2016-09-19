@@ -1,0 +1,58 @@
+{
+  "name": "chat-real-time-nodejs",
+  "version": "1.0.0",
+  "description": "A sample real time chat with nodejs and socket.io",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GustavoGottardi/chat-real-time-nodejs.git"
+  },
+  "keywords": [
+    "Chat",
+    "Real",
+    "Time",
+    "NodeJS",
+    "Socket",
+    "io"
+  ],
+  "author": "Gustavo Gottardi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GustavoGottardi/chat-real-time-nodejs/issues"
+  },
+  "homepage": "https://github.com/GustavoGottardi/chat-real-time-nodejs#readme",
+  "dependencies": {
+    "angular": "^1.5.0",
+    "angular-ui-router": "^1.0.0-beta.2",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "jsonwebtoken": "^7.1.9",
+    "method-override": "^2.3.6",
+    "mongoose": "^4.6.0",
+    "morgan": "^1.7.0",
+    "satellizer": "^0.15.5",
+    "socket.io": "^1.4.8"
+  },
+  "devDependencies": {
+    "babel-core": "^6.7.2",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.14.0",
+    "css-loader": "^0.23.1",
+    "file-loader": "^0.8.5",
+    "html-loader": "^0.4.3",
+    "html-webpack-plugin": "^2.10.0",
+    "json-loader": "^0.5.4",
+    "ngtemplate-loader": "^1.3.1",
+    "nib": "^1.1.0",
+    "node-sass": "^3.9.3",
+    "normalize.css": "^4.2.0",
+    "sass-loader": "^4.0.2",
+    "style-loader": "^0.13.0",
+    "raw-loader": "~0.5.1",
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.14.1"
+  }
+}
