@@ -7,10 +7,11 @@ var Users = mongoose.model('Users');
 var app = express();
 var fs = require('fs');
 var jwt = require('jsonwebtoken');
+var md5 = require('md5');
 
 //Rota para autenticação
 router.post('/auth/authenticate', function(req, res) {
-    Users.findOne({email: req.body.email, password: req.body.password}, function(err, user) {
+    Users.findOne({email: req.body.email, password: md5(req.body.password)}, function(err, user) {
         if (err) {
             res.json({
                 type: false,
@@ -55,7 +56,7 @@ router.post('/auth/signup', function(req, res) {
             } else {
                 var userModel = new Users();
                 userModel.email = req.body.email;
-                userModel.password = req.body.password;
+                userModel.password = md5(req.body.password);
                 userModel.save(function(err, user) {
                     user.token = jwt.sign(user, 'superSecretMyapp');
                     user.save(function(err, user1) {
