@@ -27,6 +27,8 @@
   "dependencies": {
     "angular": "^1.5.0",
     "angular-ui-router": "^1.0.0-beta.2",
+    "angular-i18n": "^1.5.8",
+    "bootstrap": "^3.3.7",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "jsonwebtoken": "^7.1.9",
@@ -51,6 +53,7 @@
     "normalize.css": "^4.2.0",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.0",
+    "url-loader": "^0.5.7",
     "raw-loader": "~0.5.1",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.14.1"

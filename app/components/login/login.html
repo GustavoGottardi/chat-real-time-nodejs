@@ -1,23 +1,27 @@
 <main>
-    <form method="post" name="loginForm" class="ng-pristine ng-invalid ng-invalid-required">
-        <div class="column log-in-form">
-            <h4 class="text-center">LOGIN</h4>
-            <hr />
-            <label ng-class="{'has-error':!loginForm.email.$valid && !loginForm.email.$pristine}">
+    <div class="center-form panel">
+      <div class="panel-body">
+        <h2 class="text-center">Log in</h2>
+        <form method="post" ng-submit="login()" name="loginForm">
+            <div class="form-group has-feedback" ng-class="{'has-error':!loginForm.email.$valid && !loginForm.email.$pristine}">
                 <input class="form-control input-lg ng-pristine ng-invalid ng-invalid-required ng-touched" type="email" name="email" ng-model="user.email" placeholder="E-mail" required="" autofocus="" style="">
                 <i class="fa fa-at form-control-feedback"></i>
                 <span class="help-block" ng-show="loginForm.email.$error.required && loginForm.email.$invalid && loginForm.email.$dirty || loginForm.email.$error.email">Um e-mail válido é obrigatório.</span>
-            </label>
-            <label ng-class="{'has-error':!loginForm.password.$valid && !loginForm.password.$pristine}">
+            </div>
+            <div class="form-group has-feedback" ng-class="{'has-error':!loginForm.password.$valid && !loginForm.password.$pristine}">
                 <input class="form-control input-lg ng-pristine ng-untouched ng-invalid ng-invalid-required" type="{{inputTypePassword}}" name="password" ng-model="user.password" placeholder="Senha" required="">
                 <i class="fa fa-key form-control-feedback"></i>
                 <span class="help-block" ng-show="loginForm.password.$error.required && loginForm.password.$invalid && loginForm.password.$dirty">Senha é obrigatório.</span>
-            </label>
-            <input id="show-password" type="checkbox" ng-model="passwordCheckbox" ng-click="hideShowPassword()">
-            <label for="checkbox" ng-if="passwordCheckbox">Esconder senha</label>
-            <label for="checkbox" ng-if="!passwordCheckbox">Mostrar Senha</label>
-            <p><button type="submit" ng-disabled="loginForm.$invalid" ng-click="login(user)" class="button alert expand" value="Log In" disabled="disabled">Entrar</button></p>
-            <p class="text-center"><a href="/forgot-password" class="forgot-password">Esqueceu sua senha?</a> | <a href="/signup" class="forgot-password">Cadastrar-se</a></p>   
-        </div>
-    </form>
+                <input id="show-password" type="checkbox" ng-model="passwordCheckbox" ng-click="hideShowPassword()">
+                <label for="checkbox" ng-if="passwordCheckbox">Esconder senha</label>
+                <label for="checkbox" ng-if="!passwordCheckbox">Mostrar Senha</label>
+            </div>
+            <button type="submit" ng-disabled="loginForm.$invalid" ng-click="login(user)" class="btn btn-lg  btn-block btn-success" value="Log In" disabled="disabled">Entrar</button>
+            <br/>
+            <p class="text-center text-muted">
+                <a href="/forgot-password" class="forgot-password">Esqueceu sua senha?</a> | <a href="/signup" class="forgot-password">Cadastrar-se</a>
+            </p>
+        </form>
+      </div>
+    </div>
 </main>

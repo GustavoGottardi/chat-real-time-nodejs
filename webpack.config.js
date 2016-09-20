@@ -31,6 +31,14 @@ module.exports = {
                 test: /\.css$/,
                 loader: 'style!css'
             },
+            {
+                test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                loader: "url?limit=10000&mimetype=application/font-woff"
+            },
+            {
+                test: /\.(jpe?g|png|gif|ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                loader: "file"
+            },
             { 
                 test: /\.(png|jpg)$/, 
                 loader: 'url-loader?limit=8192'
