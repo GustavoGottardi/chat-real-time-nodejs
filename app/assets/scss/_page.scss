@@ -1,0 +1,35 @@
+#header {
+	header{
+		@extend %position-fixed;
+		@extend %float-left;
+		width: 100%;
+		background: $black;
+		padding: 10px 15px;
+		top: 0;
+		nav{
+			.logo-header{
+				@extend %float-left;
+				@extend %display-block;
+				width: 40px;
+				height: 40px;
+				background: url('../images/logo-chat.png') no-repeat;
+			}
+			ul{
+				@extend %float-right;
+				list-style: none;
+				li{
+					@extend %float-left;
+					color: $white;
+					a{
+						color: $white;
+						cursor: pointer;
+						&:hover{
+							text-decoration: none;
+							color: $green-normal;
+						}
+					}
+				}
+			}
+		}
+	}
+}

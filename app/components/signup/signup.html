@@ -6,10 +6,10 @@
                 <div class="column log-in-form">
                     <h4 class="text-center">Inscrever-se</h4>
                     <hr />
-                    <div class="form-group has-feedback" ng-class="{'has-error':!signupForm.nome.$valid && !signupForm.nome.$pristine}">
-                        <input class="form-control input-lg ng-pristine ng-invalid ng-invalid-required ng-touched" type="nome" name="nome" ng-model="user.nome" placeholder="Nome" required="" autofocus="" style="">
+                    <div class="form-group has-feedback" ng-class="{'has-error':!signupForm.name.$valid && !signupForm.name.$pristine}">
+                        <input class="form-control input-lg ng-pristine ng-invalid ng-invalid-required ng-touched" type="name" name="name" ng-model="user.name" placeholder="name" required="" autofocus="" style="">
                         <i class="fa fa-user form-control-feedback"></i>
-                        <span class="help-block" ng-show="signupForm.nome.$error.required && signupForm.nome.$invalid && signupForm.nome.$dirty || signupForm.nome.$error.nome">O campo nome é obrigatório.</span>
+                        <span class="help-block" ng-show="signupForm.name.$error.required && signupForm.name.$invalid && signupForm.name.$dirty || signupForm.name.$error.name">O campo nome é obrigatório.</span>
                     </div>
                     <div class="form-group has-feedback" ng-class="{'has-error':!signupForm.email.$valid && !signupForm.email.$pristine}">
                         <input class="form-control input-lg ng-pristine ng-invalid ng-invalid-required ng-touched" type="email" name="email" ng-model="user.email" placeholder="E-mail" required="" autofocus="" style="">

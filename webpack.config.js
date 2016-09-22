@@ -24,6 +24,11 @@ module.exports = {
                 }
             },
             {
+                test: /\.js$/,
+                exclude: /(node_modules|bower_components)/,
+                loader: 'jshint'
+            },
+            {
                 test: /\.scss$/,
                 loader: 'style!css!sass'
             },
@@ -36,12 +41,20 @@ module.exports = {
                 loader: "url?limit=10000&mimetype=application/font-woff"
             },
             {
+                test: /\.(jpe?g|png|gif|svg)$/i,
+                loaders: [
+                    'file?hash=sha512&digest=hex&name=[hash].[ext]',
+                    'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+                ]
+            },
+            {
                 test: /\.(jpe?g|png|gif|ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
                 loader: "file"
             },
             { 
-                test: /\.(png|jpg)$/, 
-                loader: 'url-loader?limit=8192'
+                test: /\.(png|jpg)$/,
+                include: './app/assets/images/',
+                loader: 'url?limit=250000'
             },
             { 
                 test: /\.html$/, 

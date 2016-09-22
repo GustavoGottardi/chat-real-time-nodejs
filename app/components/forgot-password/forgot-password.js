@@ -14,7 +14,7 @@ let forgotPasswordModule = angular.module('forgotPassword', [
     .state('forgot-password', {
 		url: '/forgot-password',
 		template: '<forgotPassword></forgotPassword>'
-    })
+    });
 })
 .component('forgotPassword', forgotPasswordComponent);
 

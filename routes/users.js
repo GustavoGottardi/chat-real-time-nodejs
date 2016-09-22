@@ -55,6 +55,7 @@ router.post('/auth/signup', function(req, res) {
                 });
             } else {
                 var userModel = new Users();
+                userModel.name = req.body.name;
                 userModel.email = req.body.email;
                 userModel.password = md5(req.body.password);
                 userModel.save(function(err, user) {
@@ -90,6 +91,19 @@ router.get('/auth/me', ensureAuthorized, function(req, res) {
                 statusUser: 200
             });
         }
+    });
+});
+
+//Rota para visualizar todos os usuários do bd
+router.get('/auth/allUsers', ensureAuthorized, function(req, res) {
+    Users.find(function(err, items) {
+        console.log(items);
+        delete items.password;
+        res.json({
+            type: true,
+            data: items,
+            status: 200
+        });
     });
 });
 

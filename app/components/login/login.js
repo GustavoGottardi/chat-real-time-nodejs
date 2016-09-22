@@ -2,6 +2,7 @@ import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 import satellizer from 'satellizer';
 import loginComponent from './login.component';
+import userService from './user.service';
 
 let toResolve = {
 	'skipIfLoggedIn': function($q, $state, $auth) {
@@ -28,7 +29,7 @@ let loginModule = angular.module('login', [
 		url: '/',
 		template: '<login></login>',
 		resolve: toResolve
-    })
+    });
 
     $authProvider.httpInterceptor = function() {
 		return true;
@@ -46,6 +47,7 @@ let loginModule = angular.module('login', [
 	$authProvider.authToken = 'Bearer';
 	$authProvider.storageType = 'localStorage';
 })
-.component('login', loginComponent);
+.component('login', loginComponent)
+.service('userService', userService);
 
 export default loginModule;

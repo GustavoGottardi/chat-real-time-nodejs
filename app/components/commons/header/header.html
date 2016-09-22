@@ -1,0 +1,11 @@
+<header ng-if="ctrl.isAuthenticated()">
+	<nav>
+		<!-- <span class="logo-header"></span> -->
+		<img src="/dist/{{ctrl.logoImage}}">
+		<ul>
+			<li>
+				Olá, {{ctrl.currentUser.name}} | <a href="" ng-click="ctrl.logout();"> Sair</a>
+			</li>
+		</ul>
+	</nav>
+</header>

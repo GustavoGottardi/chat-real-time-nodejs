@@ -1,9 +1,7 @@
 <main>
     <h1>Chat Real-time</h1>
-    <form ng-submit="ctrl.enviar(nome,msg);">
-        <label>Nome:
-            <input type="text" id="nome" name="nome" ng-model="nome">
-        </label>
+    <sidebar-contacts></sidebar-contacts>
+    <form ng-submit="ctrl.enviar(msg);">
         <label>Mensagem:
             <input type="text" id="msg" name="msg" ng-model="msg">
         </label>

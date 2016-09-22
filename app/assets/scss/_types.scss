@@ -15,6 +15,9 @@
 
 body{
 	background: $gray-light!important;
+	.root{
+		padding-top: 50px;
+	}
 }
 
 form{

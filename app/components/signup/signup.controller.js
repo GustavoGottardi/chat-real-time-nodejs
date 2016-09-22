@@ -19,7 +19,7 @@ class signupController {
 		}).catch((error) => {
 			alert("Erro ao tentar realizar o seu cadastro, tente novamente mais tarde!");
 		});
-	};
+	}
 
 	comparePassword(password,confirm) {
         if (password === confirm) {
@@ -27,7 +27,7 @@ class signupController {
         } else {
             this.$scope.passwordConfirm=false;
         }
-    };
+    }
 
     hideShowPassword(){
         if (this.$scope.inputTypePassword == 'password'){
@@ -35,7 +35,7 @@ class signupController {
         } else{
             this.$scope.inputTypePassword = 'password';
         }
-    };
+    }
 }
 
 export default signupController;
