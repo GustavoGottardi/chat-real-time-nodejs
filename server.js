@@ -8,8 +8,9 @@ var jwt = require('jsonwebtoken');
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 require('./models/Users');
-peoples = [];
-conversations = {};
+var Users = mongoose.model('Users');
+sockets = [];
+peoples = {};
 
 
 app.use(express.static(__dirname + '/dist/'));
@@ -49,28 +50,25 @@ app.use(function(req, res, next) {
 
 // Eventos do Socket.IO
 io.sockets.on('connection', function (socket) {
-	peoples.push(socket);
 
-	socket.on('join', function(token) {
-        conversations[socket.id] = token;
+	socket.on('join', function(data) {
+	    peoples[socket.id] = data.email;
+		socket.broadcast.emit('notifyStatus', {email: data.email, status: 'online'});
     });
 
-    socket.on('disconnect', function() {
-        delete conversations[socket.id];
-        peoples.splice(peoples.indexOf(socket), 1);
-    });
-
-    socket.on('initiate private message',function(id,message) {
-        var name = data.name;
-        var receiverSocketId = findUserByName(name);
+    //initiate private message
+    socket.on('initiate private message',function(data,event) {
+        var user_name = data.name;
+        var user_email = data.email;
+        var receiverSocketId = findUserByEmail(user_email);
+        console.log(receiverSocketId);
         if(receiverSocketId) {
-            var receiver = conversations[receiverSocketId];
-            var room = getARoom(conversations[socket.id], receiver);
-            console.log(receiver);
+            var receiver = peoples[receiverSocketId];
+            var room = getARoom(peoples[socket.id], receiver);
             //join the anonymous user
             socket.join(room);
             //join the registered user 
-            peoples[receiverSocketId].join(room);
+            sockets[receiverSocketId].join(room);
             //notify the client of this
             socket.in(room).emit('private room created', room);
         }
@@ -80,6 +78,18 @@ io.sockets.on('connection', function (socket) {
         socket.broadcast.to(id).emit('private chat created', message);
     });
 
+    socket.on('user logout', function(data,event) {
+		var socketIdUser = data.socketID;
+		socket.broadcast.emit('notifySocketID', socketIdUser);
+		socket.broadcast.emit('notifyStatus', {email: data.email, status: 'offline'});
+    });
+
+	socket.on('disconnect', function() {
+	    delete conversations[socket.id];
+	    peoples.splice(peoples.indexOf(socket), 1);
+	});
+
+
 	socket.on('toServer', function (data) {
 		var msg = '<span class="user_name">'+data.name+'</span>:<span class="user_message">'+data.msg+'</span>';
 		socket.emit('toClient', msg);
@@ -88,17 +98,15 @@ io.sockets.on('connection', function (socket) {
 });
 
 //find user by name (
-function findUserByName(name) {
-    for(socketID in people) {
-        if(people[socketID].name === name) {
-            return test = socketID;
+function findUserByEmail(email) {
+    for(i=0; i < peoples.length; i++) {
+        if(peoples[i].email === email) {
+            return peoples[i].id;
         }
     }
-    // return false;
-    console.log('not there');
 }
 
 //generate private room name for two users
 function getARoom(user1, user2) {
-    return 'privateRooom' + user1.name + "And" + user2.name;
+    return 'privateRooom' + user1.email + "And" + user2.email;
 }

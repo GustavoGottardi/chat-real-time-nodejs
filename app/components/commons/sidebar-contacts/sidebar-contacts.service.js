@@ -6,6 +6,10 @@ class ContactsService {
 	getAllUsers() {
 		return this.$http.get('/auth/allUsers').then((response)=>response.data);
 	}
+
+	updateStatusNotify(user) {
+		return this.$http.put('/user/updateStatusNotify', user).then((response)=>response.data);
+	}
 }
 
 export default ContactsService;

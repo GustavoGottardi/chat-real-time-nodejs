@@ -20,7 +20,7 @@ router.post('/auth/authenticate', function(req, res) {
             });
         } else {
             if (user) {
-               res.json({
+                res.json({
                     type: true,
                     data: user,
                     token: user.token,
@@ -68,7 +68,6 @@ router.post('/auth/signup', function(req, res) {
                             statusSignup: 200
                         });
                     });
-                    console.log(user);
                 })
             }
         }
@@ -94,10 +93,30 @@ router.get('/auth/me', ensureAuthorized, function(req, res) {
     });
 });
 
+router.put('/user/updateStatusNotify', function(req, res) {
+    var userData = req.body;
+    var id = req.body._id;
+ 
+    Users.update({
+        _id: id 
+    }, userData, {
+        upsert: true
+    }, function(err, user) {
+        if (err){
+            res.send(err);
+        }
+        res.json({
+            type: true,
+            data: userData,
+            status: 200
+        });
+    });
+    
+});
+
 //Rota para visualizar todos os usuários do bd
 router.get('/auth/allUsers', ensureAuthorized, function(req, res) {
     Users.find(function(err, items) {
-        console.log(items);
         delete items.password;
         res.json({
             type: true,

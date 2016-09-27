@@ -1,5 +1,6 @@
 class LoginController {
-	constructor($auth, $state, userService) {
+	constructor($rootScope, $auth, $state, userService) {
+		this.$rootScope = $rootScope;
 		this.$auth = $auth;
 		this.$state = $state;
 		this.inputTypePassword = 'password';
@@ -15,10 +16,11 @@ class LoginController {
 					this.socket = io.connect('http://localhost:3000');
 					this.userService.getCurrentUser().then((response) => {
 						if(response.statusUser === 200) {
-							this.currentUser.token = response.data.token;
+							this.currentUser = response.data;
+							this.$rootScope.$emit('currentUser', this.currentUser);
+							this.socket.emit('join', {email: this.currentUser.email});
 						}
 					});
-					this.socket.emit('join', this.currentUser);
 				} catch (e) {
 					console.log("Error connect in chat");
 					// You really need an error message or this is pointless
