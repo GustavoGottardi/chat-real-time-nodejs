@@ -43771,7 +43771,7 @@
 			this.$rootScope.$on('selectUser', function (event, response) {
 				_this2.userMessageToken = response;
 				_this2.userMessage = _this2.findUserByToken(_this2.userMessageToken);
-				_this2.socket.emit('initiate private message', { name: _this2.userMessage.name, email: _this2.userMessage.email });
+				_this2.socket.emit('initiate private message', { name: _this2.userMessage.name, email: _this2.userMessage.email, currentUserName: _this2.currentUser.name, currentUserEmail: _this2.currentUser.email });
 			});
 	
 			this.$rootScope.$on('private room created', function (event, response) {

@@ -27,7 +27,7 @@ class HomeController {
 		this.$rootScope.$on('selectUser',(event,response) => {
 			this.userMessageToken = response;
 			this.userMessage = this.findUserByToken(this.userMessageToken);
-			this.socket.emit('initiate private message', {name: this.userMessage.name, email: this.userMessage.email});
+			this.socket.emit('initiate private message', {name: this.userMessage.name, email: this.userMessage.email, currentUserName: this.currentUser.name, currentUserEmail: this.currentUser.email});
 		});
 
 		this.$rootScope.$on('private room created',(event,response) => {

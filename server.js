@@ -7,9 +7,10 @@ var methodOverride = require('method-override');
 var jwt = require('jsonwebtoken');
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
+var _ = require('underscore');
 require('./models/Users');
 var Users = mongoose.model('Users');
-sockets = [];
+sockets = {};
 peoples = {};
 
 
@@ -52,19 +53,22 @@ app.use(function(req, res, next) {
 io.sockets.on('connection', function (socket) {
 
 	socket.on('join', function(data) {
-	    peoples[socket.id] = data.email;
+        var socketIdUser = socket.id;
+        peoples[socketIdUser] = data.email;
+	    sockets[socketIdUser] = data.email;
 		socket.broadcast.emit('notifyStatus', {email: data.email, status: 'online'});
     });
 
     //initiate private message
     socket.on('initiate private message',function(data,event) {
+        var currentUserName = data.currentUserName;
+        var currentUserEmail = data.currentUserEmail;
         var user_name = data.name;
         var user_email = data.email;
-        var receiverSocketId = findUserByEmail(user_email);
-        console.log(receiverSocketId);
+        var receiverSocketId = findSocketIDbyEmail(user_email);
         if(receiverSocketId) {
             var receiver = peoples[receiverSocketId];
-            var room = getARoom(peoples[socket.id], receiver);
+            var room = getARoom(currentUserEmail, receiver);
             //join the anonymous user
             socket.join(room);
             //join the registered user 
@@ -85,7 +89,7 @@ io.sockets.on('connection', function (socket) {
     });
 
 	socket.on('disconnect', function() {
-	    delete conversations[socket.id];
+	    delete peoples[socket.id];
 	    peoples.splice(peoples.indexOf(socket), 1);
 	});
 
@@ -97,16 +101,21 @@ io.sockets.on('connection', function (socket) {
 	});
 });
 
-//find user by name (
-function findUserByEmail(email) {
-    for(i=0; i < peoples.length; i++) {
-        if(peoples[i].email === email) {
-            return peoples[i].id;
+//find user by name
+function findSocketIDbyEmail(email) {
+    var socketID;
+    _.find(peoples, function(value,key){
+        if (value === email) {
+          socketID = key;
+          return true;
+        } else {
+          return false;
         }
-    }
+    });
+    return socketID;
 }
 
 //generate private room name for two users
 function getARoom(user1, user2) {
-    return 'privateRooom' + user1.email + "And" + user2.email;
+    return 'privateRooom' + user1 + "And" + user2;
 }
