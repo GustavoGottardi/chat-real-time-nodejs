@@ -17,8 +17,8 @@ class LoginController {
 					this.userService.getCurrentUser().then((response) => {
 						if(response.statusUser === 200) {
 							this.currentUser = response.data;
-							this.$rootScope.$emit('currentUser', this.currentUser);
 							this.socket.emit('join', {email: this.currentUser.email});
+							this.$rootScope.$emit('currentUser', this.currentUser);
 						}
 					});
 				} catch (e) {

@@ -1,14 +1,17 @@
-<main>
-    <sidebar-contacts class="sidebarContacts"></sidebar-contacts>
-    <form ng-submit="ctrl.enviar(msg);">
-    	<div class="userMessage">
+<main class="row">
+    <sidebar-contacts class="sidebar-chat col-lg-3"></sidebar-contacts>
+    <div class="col-lg-9">
+    	<div class="header-chat">
     		<span class="nameUserMessage">{{ctrl.userMessage.name}}</span>
     	</div>
-        <label>Mensagem:
-            <input type="text" id="msg" name="msg" ng-model="msg">
-        </label>
-        <button type="submit" id="enviar">Enviar</button>
-    </form>
-    <hr>
-    <div id="historico"></div>
+        <div id="historico"></div>
+        <form ng-submit="ctrl.enviar(msg);" class="form-chat">
+            <div class="typeMessage">
+                <label>Mensagem:
+                    <input type="text" id="msg" name="msg" ng-model="msg">
+                </label>
+                <button type="submit" id="enviar">Enviar</button>
+            </div>
+        </form>
+    </div>
 </main>

@@ -7,7 +7,7 @@ class ContactsService {
 		return this.$http.get('/auth/allUsers').then((response)=>response.data);
 	}
 
-	updateStatusNotify(user) {
+	updateStatusNotifyAndSocketID(user) {
 		return this.$http.put('/user/updateStatusNotify', user).then((response)=>response.data);
 	}
 }

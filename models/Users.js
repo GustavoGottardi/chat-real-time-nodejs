@@ -6,7 +6,8 @@ var UserSchema = new mongoose.Schema({
     email: String,
     password: String,
     token: String,
-    statusNotify: String
+    statusNotify: String,
+    socketID: String
 });
  
 //Define o model Users

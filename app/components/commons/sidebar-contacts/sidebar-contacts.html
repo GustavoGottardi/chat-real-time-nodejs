@@ -1,3 +1,3 @@
 <ul>
-	<li ng-repeat="users in ctrl.allUsers"><span class="status-notify" ng-class="{'online': users.statusNotify == 'online'}">{{users.statusNotify}}</span><a href="" ng-click="ctrl.selectUser(users.token);">{{users.name}}</a></li>
+	<li ng-repeat="users in ctrl.allUsers"><span class="status-notify" ng-class="{'online': users.statusNotify == 'online'}">{{users.statusNotify}}</span><a href="" ng-click="ctrl.selectUser(users.email);">{{users.name}}</a></li>
 </ul>

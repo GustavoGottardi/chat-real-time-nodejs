@@ -40479,7 +40479,7 @@
 /* 12 */
 /***/ function(module, exports) {
 
-	module.exports = "<ul>\n\t<li ng-repeat=\"users in ctrl.allUsers\"><span class=\"status-notify\" ng-class=\"{'online': users.statusNotify == 'online'}\">{{users.statusNotify}}</span><a href=\"\" ng-click=\"ctrl.selectUser(users.token);\">{{users.name}}</a></li>\n</ul>"
+	module.exports = "<ul>\n\t<li ng-repeat=\"users in ctrl.allUsers\"><span class=\"status-notify\" ng-class=\"{'online': users.statusNotify == 'online'}\">{{users.statusNotify}}</span><a href=\"\" ng-click=\"ctrl.selectUser(users.email);\">{{users.name}}</a></li>\n</ul>"
 
 /***/ },
 /* 13 */
@@ -40516,20 +40516,22 @@
 				_this2.allUsers = response;
 			});
 	
-			this.socket.on('notifyStatus', function (response, event) {
+			this.socket.on('notifyStatusAndSocket', function (response, event) {
 				for (var i = 0; i < _this2.allUsers.length; i++) {
 					if (_this2.allUsers[i].email == response.email) {
 						_this2.allUsers[i].statusNotify = response.status;
-						_this2.contactsService.updateStatusNotify(_this2.allUsers[i]).then(function (response) {});
+						_this2.allUsers[i].socketID = response.socketID;
+						_this2.contactsService.updateStatusNotifyAndSocketID(_this2.allUsers[i]).then(function (response) {});
 					}
 				}
 			});
 	
-			this.$rootScope.$on('notifyStatus', function (event, response) {
+			this.$rootScope.$on('notifyStatusAndSocket', function (event, response) {
 				for (var i = 0; i < _this2.allUsers.length; i++) {
 					if (_this2.allUsers[i].email == response.email) {
 						_this2.allUsers[i].statusNotify = response.status;
-						_this2.contactsService.updateStatusNotify(_this2.allUsers[i]).then(function (response) {
+						_this2.allUsers[i].socketID = response.socketID;
+						_this2.contactsService.updateStatusNotifyAndSocketID(_this2.allUsers[i]).then(function (response) {
 							if (response.status === 200) {
 								_this2.updateAllUsers();
 							}
@@ -40541,8 +40543,8 @@
 	
 		_createClass(SidebarContactsController, [{
 			key: 'selectUser',
-			value: function selectUser(token) {
-				this.$rootScope.$emit('selectUser', token);
+			value: function selectUser(email) {
+				this.$rootScope.$emit('selectUser', email);
 			}
 		}, {
 			key: 'getAllUsers',
@@ -40607,8 +40609,8 @@
 				});
 			}
 		}, {
-			key: 'updateStatusNotify',
-			value: function updateStatusNotify(user) {
+			key: 'updateStatusNotifyAndSocketID',
+			value: function updateStatusNotifyAndSocketID(user) {
 				return this.$http.put('/user/updateStatusNotify', user).then(function (response) {
 					return response.data;
 				});
@@ -43722,7 +43724,7 @@
 /* 23 */
 /***/ function(module, exports) {
 
-	module.exports = "<main>\n    <sidebar-contacts class=\"sidebarContacts\"></sidebar-contacts>\n    <form ng-submit=\"ctrl.enviar(msg);\">\n    \t<div class=\"userMessage\">\n    \t\t<span class=\"nameUserMessage\">{{ctrl.userMessage.name}}</span>\n    \t</div>\n        <label>Mensagem:\n            <input type=\"text\" id=\"msg\" name=\"msg\" ng-model=\"msg\">\n        </label>\n        <button type=\"submit\" id=\"enviar\">Enviar</button>\n    </form>\n    <hr>\n    <div id=\"historico\"></div>\n</main>"
+	module.exports = "<main class=\"row\">\n    <sidebar-contacts class=\"sidebar-chat col-lg-3\"></sidebar-contacts>\n    <div class=\"col-lg-9\">\n    \t<div class=\"header-chat\">\n    \t\t<span class=\"nameUserMessage\">{{ctrl.userMessage.name}}</span>\n    \t</div>\n        <div id=\"historico\"></div>\n        <form ng-submit=\"ctrl.enviar(msg);\" class=\"form-chat\">\n            <div class=\"typeMessage\">\n                <label>Mensagem:\n                    <input type=\"text\" id=\"msg\" name=\"msg\" ng-model=\"msg\">\n                </label>\n                <button type=\"submit\" id=\"enviar\">Enviar</button>\n            </div>\n        </form>\n    </div>\n</main>"
 
 /***/ },
 /* 24 */
@@ -43747,38 +43749,46 @@
 			var _this = this;
 			this.$rootScope = $rootScope;
 			this.socket = io.connect('http://localhost:3000');
-			this.socket.on('toClient', function (msg) {
-				document.getElementById('historico').innerHTML += msg;
-			});
 			this.userService = userService;
 			this.homeService = homeService;
 			this.currentUser = {};
 			this.userMessage = {};
 			this.allUsers = {};
+			this.conversations = [];
 	
 			this.userService.getCurrentUser().then(function (response) {
 				if (response.statusUser === 200) {
-					_this2.currentUser.name = response.data.name;
-					_this2.currentUser.email = response.data.email;
-					_this2.currentUser.token = response.data.token;
+					_this2.currentUser = response.data;
 				}
+			});
+	
+			this.socket.on('toClient', function (data) {
+				var classStyleMessage = false;
+				console.log(data.email);
+				console.log(_this.currentUser);
+				if (data.email == _this.currentUser.email) {
+					classStyleMessage = "currentUser";
+				}
+				document.getElementById('historico').innerHTML += '<div class="message-individual ' + classStyleMessage + '"><span class="user_name">' + data.name + '</span>: <span class="user_message">' + data.message + '</span></div>';
 			});
 	
 			this.$rootScope.$on('allUsers', function (event, response) {
 				_this2.allUsers = response;
 			});
 	
+			console.log(this.allUsers);
+	
 			this.$rootScope.$on('selectUser', function (event, response) {
-				_this2.userMessageToken = response;
-				_this2.userMessage = _this2.findUserByToken(_this2.userMessageToken);
+				_this2.userMessageEmail = response;
+				_this2.userMessage = _this2.findUserByEmail(_this2.userMessageEmail);
 				_this2.socket.emit('initiate private message', { name: _this2.userMessage.name, email: _this2.userMessage.email, currentUserName: _this2.currentUser.name, currentUserEmail: _this2.currentUser.email });
 			});
 	
-			this.$rootScope.$on('private room created', function (event, response) {
-				console.log(response);
+			this.socket.on('private room created', function (response, event) {
+				_this2.conversations[response] = {};
 			});
 	
-			this.$rootScope.$on('private chat created', function (event, response) {
+			this.socket.on('private chat created', function (response, event) {
 				console.log(response);
 			});
 		}
@@ -43786,16 +43796,26 @@
 		_createClass(HomeController, [{
 			key: 'enviar',
 			value: function enviar(msg) {
-				var user_name = this.currentUser.name;
-				this.socket.emit('send private message', { name: user_name, msg: msg });
+				//this.socket.emit('send private message', {id: this.userMessage.socketID, message: msg});
+				this.socket.emit('toServer', { name: this.currentUser.name, message: msg, email: this.currentUser.email });
 			}
 		}, {
-			key: 'findUserByToken',
-			value: function findUserByToken(token) {
+			key: 'findUserByEmail',
+			value: function findUserByEmail(email) {
 				var allUsers = this.allUsers;
 				for (var i = 0; i < allUsers.length; i++) {
-					if (allUsers[i].token == token) {
+					if (allUsers[i].email == email) {
 						return allUsers[i];
+					}
+				}
+			}
+		}, {
+			key: 'updateUserSocketByEmail',
+			value: function updateUserSocketByEmail(email, socket) {
+				var allUsers = this.allUsers;
+				for (var i = 0; i < allUsers.length; i++) {
+					if (allUsers[i].email == email) {
+						allUsers[i].socketID = socket;
 					}
 				}
 			}
@@ -43975,8 +43995,8 @@
 							_this.userService.getCurrentUser().then(function (response) {
 								if (response.statusUser === 200) {
 									_this.currentUser = response.data;
-									_this.$rootScope.$emit('currentUser', _this.currentUser);
 									_this.socket.emit('join', { email: _this.currentUser.email });
+									_this.$rootScope.$emit('currentUser', _this.currentUser);
 								}
 							});
 						} catch (e) {
@@ -44332,7 +44352,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".nopadding,\n.column.nopadding {\n  padding: 0 0 0 0; }\n\n.nopaddingleft,\n.column.nopaddingleft {\n  padding-left: 0; }\n\n.nopaddingright,\n.column.nopaddingright {\n  padding-right: 0; }\n\nbody {\n  background: #f2f2f2 !important; }\n  body .root {\n    padding-top: 50px; }\n\nform .help-block {\n  background: #F47A66;\n  color: #ffffff;\n  padding: 2px 10px 0;\n  margin: -4px 0 10px 0; }\n\n.full-width {\n  width: 100%;\n  margin-left: auto;\n  margin-right: auto;\n  max-width: initial; }\n\nform .help-block, #header header nav .logo-header {\n  display: block; }\n\nform .help-block {\n  position: relative; }\n\n#header header {\n  position: fixed; }\n\n#header header, #header header nav .logo-header, #header header nav ul li {\n  float: left; }\n\n#header header nav ul {\n  float: right; }\n\n#header header {\n  width: 100%;\n  background: #000000;\n  padding: 10px 15px;\n  top: 0; }\n  #header header nav .logo-header {\n    width: 40px;\n    height: 40px;\n    background: url(" + __webpack_require__(10) + ") no-repeat; }\n  #header header nav ul {\n    list-style: none; }\n    #header header nav ul li {\n      color: #ffffff; }\n      #header header nav ul li a {\n        color: #ffffff;\n        cursor: pointer; }\n        #header header nav ul li a:hover {\n          text-decoration: none;\n          color: #43AC6A; }\n\n.center-form {\n  width: 400px;\n  margin: 10% auto 0; }\n", ""]);
+	exports.push([module.id, ".nopadding,\n.column.nopadding {\n  padding: 0 0 0 0; }\n\n.nopaddingleft,\n.column.nopaddingleft {\n  padding-left: 0; }\n\n.nopaddingright,\n.column.nopaddingright {\n  padding-right: 0; }\n\nbody {\n  background: #f2f2f2 !important; }\n  body .root {\n    padding-top: 50px; }\n\nform .help-block {\n  background: #F47A66;\n  color: #ffffff;\n  padding: 2px 10px 0;\n  margin: -4px 0 10px 0; }\n\n.full-width {\n  width: 100%;\n  margin-left: auto;\n  margin-right: auto;\n  max-width: initial; }\n\n.app .message-individual {\n  text-align: left; }\n\n.app .message-individual.currentUser {\n  text-align: right; }\n\nform .help-block, #header header nav .logo-header {\n  display: block; }\n\nform .help-block {\n  position: relative; }\n\n#header header, .app .header-chat, .app .form-chat {\n  position: fixed; }\n\n#header header, #header header nav .logo-header, #header header nav ul li {\n  float: left; }\n\n#header header nav ul {\n  float: right; }\n\n#header header {\n  width: 100%;\n  background: #000000;\n  padding: 10px 15px;\n  top: 0;\n  z-index: 100; }\n  #header header nav .logo-header {\n    width: 40px;\n    height: 40px;\n    background: url(" + __webpack_require__(10) + ") no-repeat; }\n  #header header nav ul {\n    list-style: none; }\n    #header header nav ul li {\n      color: #ffffff; }\n      #header header nav ul li a {\n        color: #ffffff;\n        cursor: pointer; }\n        #header header nav ul li a:hover {\n          text-decoration: none;\n          color: #43AC6A; }\n\n.app .header-chat {\n  width: 100%;\n  top: 50px; }\n\n.app .form-chat {\n  width: 100%;\n  bottom: 0; }\n\n.app .sidebar-chat {\n  height: 100%;\n  border-right: 1px solid #000000; }\n\n.app .message-individual {\n  width: 100%;\n  padding: 6px; }\n  .app .message-individual.currentUser {\n    background: #43AC6A;\n    color: #ffffff; }\n\n.center-form {\n  width: 400px;\n  margin: 10% auto 0; }\n", ""]);
 	
 	// exports
 

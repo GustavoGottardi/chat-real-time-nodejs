@@ -15,20 +15,22 @@ class SidebarContactsController {
 			this.allUsers = response;
 		});
 
-		this.socket.on('notifyStatus',(response,event) => {
+		this.socket.on('notifyStatusAndSocket',(response,event) => {
 			for(let i=0; i < this.allUsers.length; i++) {
 				if(this.allUsers[i].email == response.email) {
 					this.allUsers[i].statusNotify = response.status;
-					this.contactsService.updateStatusNotify(this.allUsers[i]).then((response) => {});
+					this.allUsers[i].socketID = response.socketID;
+					this.contactsService.updateStatusNotifyAndSocketID(this.allUsers[i]).then((response) => {});
 				}
 			}
 		});
 
-		this.$rootScope.$on('notifyStatus', (event,response) => {
+		this.$rootScope.$on('notifyStatusAndSocket', (event,response) => {
 			for(let i=0; i < this.allUsers.length; i++) {
 				if(this.allUsers[i].email == response.email) {
 					this.allUsers[i].statusNotify = response.status;
-					this.contactsService.updateStatusNotify(this.allUsers[i]).then((response) => {
+					this.allUsers[i].socketID = response.socketID;
+					this.contactsService.updateStatusNotifyAndSocketID(this.allUsers[i]).then((response) => {
 						if(response.status === 200){
 							this.updateAllUsers();
 						}
@@ -38,8 +40,8 @@ class SidebarContactsController {
 		});
 	}
 
-	selectUser(token) {
-		this.$rootScope.$emit('selectUser', token);
+	selectUser(email) {
+		this.$rootScope.$emit('selectUser', email);
 	}
 
 	getAllUsers() {

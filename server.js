@@ -33,9 +33,6 @@ function startServer(){
 		app.get('*', function(req, res) {
 			res.sendFile(__dirname + '/dist/index.html');
 		});
-		// app.get('/', function (req, res) {
-		// 	res.sendfile(__dirname + '/index.html');
-		// });
 	});
 };
 
@@ -56,11 +53,11 @@ io.sockets.on('connection', function (socket) {
         var socketIdUser = socket.id;
         peoples[socketIdUser] = data.email;
 	    sockets[socketIdUser] = data.email;
-		socket.broadcast.emit('notifyStatus', {email: data.email, status: 'online'});
+        socket.broadcast.emit('notifyStatusAndSocket', {email: data.email, status: 'online', socketID: socketIdUser});
     });
 
     //initiate private message
-    socket.on('initiate private message',function(data,event) {
+    socket.on('initiate private message',function(data) {
         var currentUserName = data.currentUserName;
         var currentUserEmail = data.currentUserEmail;
         var user_name = data.name;
@@ -71,18 +68,16 @@ io.sockets.on('connection', function (socket) {
             var room = getARoom(currentUserEmail, receiver);
             //join the anonymous user
             socket.join(room);
-            //join the registered user 
-            sockets[receiverSocketId].join(room);
             //notify the client of this
-            socket.in(room).emit('private room created', room);
+            socket.broadcast.in(room).emit('private room created', room);
         }
     });
 
-    socket.on('send private message', function(id, message) {
-        socket.broadcast.to(id).emit('private chat created', message);
+    socket.on('send private message', function(data) {
+        socket.broadcast.to(data.id).emit('private chat created', data.message);
     });
 
-    socket.on('user logout', function(data,event) {
+    socket.on('user logout', function(data) {
 		var socketIdUser = data.socketID;
 		socket.broadcast.emit('notifySocketID', socketIdUser);
 		socket.broadcast.emit('notifyStatus', {email: data.email, status: 'offline'});
@@ -95,7 +90,7 @@ io.sockets.on('connection', function (socket) {
 
 
 	socket.on('toServer', function (data) {
-		var msg = '<span class="user_name">'+data.name+'</span>:<span class="user_message">'+data.msg+'</span>';
+		var msg = {name: data.name, message: data.message, email: data.email};
 		socket.emit('toClient', msg);
 		socket.broadcast.emit('toClient', msg);
 	});

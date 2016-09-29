@@ -3,52 +3,70 @@ class HomeController {
 		let _this = this;
 		this.$rootScope = $rootScope;
 		this.socket = io.connect('http://localhost:3000');
-		this.socket.on('toClient', function (msg) {
-			document.getElementById('historico').innerHTML += msg;
-		});
 		this.userService = userService;
 		this.homeService = homeService;
 		this.currentUser = {};
 		this.userMessage = {};
 		this.allUsers = {};
-
+		this.conversations = [];
+		
 		this.userService.getCurrentUser().then((response) => {
 			if(response.statusUser === 200) {
-				this.currentUser.name = response.data.name;
-				this.currentUser.email = response.data.email;
-				this.currentUser.token = response.data.token;
+				this.currentUser = response.data;
 			}
+		});
+
+
+		this.socket.on('toClient', function (data) {
+			let classStyleMessage = false;
+			console.log(data.email);
+			console.log(_this.currentUser);
+			if(data.email == _this.currentUser.email){
+				classStyleMessage = "currentUser";
+			}
+			document.getElementById('historico').innerHTML += '<div class="message-individual '+classStyleMessage+'"><span class="user_name">'+data.name+'</span>: <span class="user_message">'+data.message+'</span></div>';
 		});
 
 		this.$rootScope.$on('allUsers',(event,response) => {
 			this.allUsers = response;
 		});
 
+		console.log(this.allUsers);
+
 		this.$rootScope.$on('selectUser',(event,response) => {
-			this.userMessageToken = response;
-			this.userMessage = this.findUserByToken(this.userMessageToken);
+			this.userMessageEmail = response;
+			this.userMessage = this.findUserByEmail(this.userMessageEmail);
 			this.socket.emit('initiate private message', {name: this.userMessage.name, email: this.userMessage.email, currentUserName: this.currentUser.name, currentUserEmail: this.currentUser.email});
 		});
 
-		this.$rootScope.$on('private room created',(event,response) => {
-			console.log(response);
+		this.socket.on('private room created',(response,event) => {
+			this.conversations[response] = {};
 		});
 
-		this.$rootScope.$on('private chat created',(event,response) => {
+		this.socket.on('private chat created',(response,event) => {
 			console.log(response);
 		});
 	}
 
 	enviar(msg){
-		let user_name = this.currentUser.name;
-		this.socket.emit('send private message', {name: user_name, msg: msg});
+		//this.socket.emit('send private message', {id: this.userMessage.socketID, message: msg});
+		this.socket.emit('toServer', {name: this.currentUser.name, message: msg, email: this.currentUser.email});
 	}
 
-	findUserByToken(token) {
+	findUserByEmail(email) {
 		let allUsers = this.allUsers;
 		for(let i=0; i < allUsers.length; i++){
-			if(allUsers[i].token == token){
+			if(allUsers[i].email == email){
 				return allUsers[i];
+			}
+		}
+	}
+
+	updateUserSocketByEmail(email,socket) {
+		let allUsers = this.allUsers;
+		for(let i=0; i < allUsers.length; i++){
+			if(allUsers[i].email == email){
+				allUsers[i].socketID = socket;
 			}
 		}
 	}
