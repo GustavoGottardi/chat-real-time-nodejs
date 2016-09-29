@@ -16,6 +16,7 @@ peoples = {};
 
 app.use(express.static(__dirname + '/dist/'));
 app.set('view engine', 'html');
+app.set('port', (process.env.PORT || 5000));
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(bodyParser.json());
@@ -28,7 +29,7 @@ db.on('error', console.error);
 db.once('open', startServer);
 
 function startServer(){
-	server.listen(process.env.PORT || 3000, function(){
+	server.listen(app.get('port'), function(){
 		console.log("Aplicação executada na porta 3000");
 		app.get('*', function(req, res) {
 			res.sendFile(__dirname + '/dist/index.html');
