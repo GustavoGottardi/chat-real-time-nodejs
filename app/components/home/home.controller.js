@@ -10,6 +10,7 @@ class HomeController {
 		this.allUsers = {};
 		this.conversations = [];
 		this.selectUserCheck = false;
+		this.userMessage.name = 'Início';
 		
 		this.userService.getCurrentUser().then((response) => {
 			if(response.statusUser === 200) {
@@ -20,19 +21,16 @@ class HomeController {
 
 		this.socket.on('toClient', function (data) {
 			let classStyleMessage = false;
-			console.log(data.email);
-			console.log(_this.currentUser);
 			if(data.email == _this.currentUser.email){
 				classStyleMessage = "currentUser";
 			}
 			document.getElementById('historico').innerHTML += '<div class="message-individual '+classStyleMessage+'"><div class="bubble bubble-text"><span class="user_name">'+data.name+': </span><span class="user_message">'+data.message+'</span></div></div>';
+			document.getElementById("msg").value = "";
 		});
 
 		this.$rootScope.$on('allUsers',(event,response) => {
 			this.allUsers = response;
 		});
-
-		console.log(this.allUsers);
 
 		this.$rootScope.$on('selectUser',(event,response) => {
 			this.selectUserCheck = true;
@@ -51,7 +49,6 @@ class HomeController {
 	}
 
 	enviar(msg){
-		//this.socket.emit('send private message', {id: this.userMessage.socketID, message: msg});
 		this.socket.emit('toServer', {name: this.currentUser.name, message: msg, email: this.currentUser.email});
 	}
 

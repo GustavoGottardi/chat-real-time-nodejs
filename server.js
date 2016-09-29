@@ -58,7 +58,7 @@ io.sockets.on('connection', function (socket) {
     });
 
     //initiate private message
-    socket.on('initiate private message',function(data) {
+    socket.on('initiate private message', function(data) {
         var currentUserName = data.currentUserName;
         var currentUserEmail = data.currentUserEmail;
         var user_name = data.name;
@@ -81,7 +81,7 @@ io.sockets.on('connection', function (socket) {
     socket.on('user logout', function(data) {
 		var socketIdUser = data.socketID;
 		socket.broadcast.emit('notifySocketID', socketIdUser);
-		socket.broadcast.emit('notifyStatus', {email: data.email, status: 'offline'});
+		socket.broadcast.emit('notifyStatusAndSocket', {email: data.email, status: 'offline'});
     });
 
 	socket.on('disconnect', function() {
