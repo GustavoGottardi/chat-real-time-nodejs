@@ -28,7 +28,7 @@ db.on('error', console.error);
 db.once('open', startServer);
 
 function startServer(){
-	server.listen(3000, function(){
+	server.listen(process.env.PORT || 3000, function(){
 		console.log("Aplicação executada na porta 3000");
 		app.get('*', function(req, res) {
 			res.sendFile(__dirname + '/dist/index.html');

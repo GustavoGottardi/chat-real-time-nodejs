@@ -24,7 +24,7 @@ class HomeController {
 			if(data.email == _this.currentUser.email){
 				classStyleMessage = "currentUser";
 			}
-			document.getElementById('historico').innerHTML += '<div class="message-individual '+classStyleMessage+'"><span class="user_name">'+data.name+'</span>: <span class="user_message">'+data.message+'</span></div>';
+			document.getElementById('historico').innerHTML += '<div class="message-individual '+classStyleMessage+'"><div class="bubble bubble-text"><span class="user_name">'+data.name+': </span><span class="user_message">'+data.message+'</span></div></div>';
 		});
 
 		this.$rootScope.$on('allUsers',(event,response) => {
