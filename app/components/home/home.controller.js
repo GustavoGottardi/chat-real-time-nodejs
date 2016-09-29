@@ -9,6 +9,7 @@ class HomeController {
 		this.userMessage = {};
 		this.allUsers = {};
 		this.conversations = [];
+		this.selectUserCheck = false;
 		
 		this.userService.getCurrentUser().then((response) => {
 			if(response.statusUser === 200) {
@@ -34,6 +35,7 @@ class HomeController {
 		console.log(this.allUsers);
 
 		this.$rootScope.$on('selectUser',(event,response) => {
+			this.selectUserCheck = true;
 			this.userMessageEmail = response;
 			this.userMessage = this.findUserByEmail(this.userMessageEmail);
 			this.socket.emit('initiate private message', {name: this.userMessage.name, email: this.userMessage.email, currentUserName: this.currentUser.name, currentUserEmail: this.currentUser.email});

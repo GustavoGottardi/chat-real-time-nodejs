@@ -16,7 +16,7 @@ peoples = {};
 
 app.use(express.static(__dirname + '/dist/'));
 app.set('view engine', 'html');
-app.set('port', (process.env.PORT || 5000));
+app.set('port', (process.env.PORT || 3000));
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(bodyParser.json());

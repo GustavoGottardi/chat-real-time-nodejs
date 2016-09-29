@@ -1,15 +1,13 @@
 <main>
     <sidebar-contacts class="sidebar-chat col-lg-3"></sidebar-contacts>
     <div class="conversation col-lg-9">
-    	<div class="header-chat">
+    	<div class="header-chat" ng-if="ctrl.selectUserCheck">
     		<span class="nameUserMessage">{{ctrl.userMessage.name}}</span>
     	</div>
         <div id="historico"></div>
-        <form ng-submit="ctrl.enviar(msg);" class="form-chat">
-            <div class="typeMessage">
-                <label>Mensagem:
-                    <input type="text" id="msg" name="msg" ng-model="msg">
-                </label>
+        <form ng-submit="ctrl.enviar(msg);" class="form-chat" ng-if="ctrl.selectUserCheck">
+            <div class="inputMessage">
+                <input type="text" id="msg" name="msg" ng-model="msg" placeholder="Digite uma mensagem...">
                 <button type="submit" id="enviar">Enviar</button>
             </div>
         </form>
