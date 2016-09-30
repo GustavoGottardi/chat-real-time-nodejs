@@ -35,12 +35,10 @@ let loginModule = angular.module('login', [
 		return true;
 	};
 
-	let current_url = location.host;
-
 	$authProvider.withCredentials = true;
 	$authProvider.tokenRoot = null;
 	$authProvider.cordova = false;
-	$authProvider.baseUrl = '/';
+	$authProvider.baseUrl = window.location.origin;
 	$authProvider.loginUrl = '/auth/authenticate';
 	$authProvider.signupUrl = '/auth/signup';
 	$authProvider.tokenName = 'token';
