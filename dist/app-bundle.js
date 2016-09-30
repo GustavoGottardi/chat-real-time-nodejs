@@ -43906,12 +43906,11 @@
 			return true;
 		};
 	
-		var current_url = location.host;
-	
 		$authProvider.withCredentials = true;
 		$authProvider.tokenRoot = null;
 		$authProvider.cordova = false;
-		$authProvider.baseUrl = current_url;
+		$authProvider.baseUrl = "https://lit-scrubland-52523.herokuapp.com";
+		// $authProvider.baseUrl = "http://localhost:3000";
 		$authProvider.loginUrl = '/auth/authenticate';
 		$authProvider.signupUrl = '/auth/signup';
 		$authProvider.tokenName = 'token';
