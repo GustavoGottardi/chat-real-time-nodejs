@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "A sample real time chat with nodejs and socket.io",
   "main": "index.js",
+  "engines": {
+    "node": "4.2.6",
+    "npm": "3.5.2"
+  },
   "scripts": {
     "dev": "nodemon server.js"
   },
