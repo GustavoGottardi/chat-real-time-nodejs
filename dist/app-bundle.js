@@ -43726,7 +43726,7 @@
 /* 23 */
 /***/ function(module, exports) {
 
-	module.exports = "<main>\n    <sidebar-contacts class=\"sidebar-chat col-lg-3\"></sidebar-contacts>\n    <div class=\"conversation col-lg-9\">\n    \t<div class=\"header-chat\">\n    \t\t<span class=\"nameUserMessage\">{{ctrl.userMessage.name}}</span>\n    \t</div>\n        <div id=\"historico\" class=\"historico\"></div>\n        <form ng-submit=\"ctrl.enviar(msg);\" class=\"form-chat\">\n            <div class=\"inputMessage\">\n                <input type=\"text\" id=\"msg\" name=\"msg\" class=\"msg{{ctrl.currentUser.user_name}}\" ng-model=\"msg\" placeholder=\"Digite uma mensagem...\">\n            </div>\n        </form>\n    </div>\n</main>"
+	module.exports = "<main>\n    <sidebar-contacts class=\"sidebar-chat col-lg-3\"></sidebar-contacts>\n    <div class=\"conversation col-lg-9\">\n    \t<div class=\"header-chat\">\n    \t\t<span class=\"nameUserMessage\">{{ctrl.userMessage.name}}</span>\n    \t</div>\n        <div id=\"historico\" class=\"historico\"></div>\n        <form ng-submit=\"ctrl.enviar(msg);\" class=\"form-chat\">\n            <div class=\"inputMessage\">\n                <input type=\"text\" id=\"msg\" name=\"msg\" ng-model=\"msg\" placeholder=\"Digite uma mensagem...\">\n            </div>\n        </form>\n    </div>\n</main>"
 
 /***/ },
 /* 24 */
@@ -43774,7 +43774,6 @@
 					classStyleMessage = "currentUser";
 				}
 				document.getElementById('historico').innerHTML += '<div class="message-individual ' + classStyleMessage + '"><div class="bubble bubble-text"><span class="user_name">' + data.name + ': </span><span class="user_message">' + data.message + '</span></div></div>';
-				document.querySelector(".msg" + _this.currentUser.user_name).value = "";
 			});
 	
 			this.$rootScope.$on('allUsers', function (event, response) {
@@ -43801,6 +43800,7 @@
 			key: 'enviar',
 			value: function enviar(msg) {
 				this.socket.emit('toServer', { name: this.currentUser.name, message: msg, email: this.currentUser.email });
+				document.getElementById("msg").value = "";
 			}
 		}, {
 			key: 'findUserByEmail',

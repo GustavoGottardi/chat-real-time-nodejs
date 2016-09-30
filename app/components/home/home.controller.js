@@ -27,7 +27,6 @@ class HomeController {
 				classStyleMessage = "currentUser";
 			}
 			document.getElementById('historico').innerHTML += '<div class="message-individual '+classStyleMessage+'"><div class="bubble bubble-text"><span class="user_name">'+data.name+': </span><span class="user_message">'+data.message+'</span></div></div>';
-			document.querySelector(".msg"+_this.currentUser.user_name).value = "";
 		});
 
 		this.$rootScope.$on('allUsers',(event,response) => {
@@ -52,6 +51,7 @@ class HomeController {
 
 	enviar(msg){
 		this.socket.emit('toServer', {name: this.currentUser.name, message: msg, email: this.currentUser.email});
+		document.getElementById("msg").value = "";
 	}
 
 	findUserByEmail(email) {
