@@ -16,6 +16,7 @@ class HomeController {
 		this.userService.getCurrentUser().then((response) => {
 			if(response.statusUser === 200) {
 				this.currentUser = response.data;
+				this.currentUser.user_name = this.currentUser.name.split(' ').join('');
 			}
 		});
 
@@ -26,7 +27,7 @@ class HomeController {
 				classStyleMessage = "currentUser";
 			}
 			document.getElementById('historico').innerHTML += '<div class="message-individual '+classStyleMessage+'"><div class="bubble bubble-text"><span class="user_name">'+data.name+': </span><span class="user_message">'+data.message+'</span></div></div>';
-			document.getElementById("msg").value = "";
+			document.querySelector(".msg"+_this.currentUser.user_name).value = "";
 		});
 
 		this.$rootScope.$on('allUsers',(event,response) => {
