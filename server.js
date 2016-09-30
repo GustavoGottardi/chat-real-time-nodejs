@@ -13,6 +13,14 @@ var Users = mongoose.model('Users');
 sockets = {};
 peoples = {};
 
+var check_node_env = false;
+switch(process.env.NODE_ENV){
+    case 'development':
+        check_node_env = 'dev';
+    case 'production':
+        check_node_env = 'prod';
+}
+
 
 app.use(express.static(__dirname + '/dist/'));
 app.set('view engine', 'html');
@@ -23,7 +31,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(methodOverride());
 
-mongoose.connect('mongodb://localhost/chat');
+if(check_node_env == 'prod') {
+    mongoose.connect('mongodb://chat:chat1234556@ds047166.mlab.com:47166/chat');
+} else {
+    mongoose.connect('mongodb://localhost/chat');
+}
+
 var db = mongoose.connection;
 db.on('error', console.error);
 db.once('open', startServer);
