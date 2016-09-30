@@ -13,15 +13,6 @@ var Users = mongoose.model('Users');
 sockets = {};
 peoples = {};
 
-var check_node_env = false;
-switch(process.env.NODE_ENV){
-    case 'development':
-        check_node_env = 'dev';
-    case 'production':
-        check_node_env = 'prod';
-}
-
-
 app.use(express.static(__dirname + '/dist/'));
 app.set('view engine', 'html');
 app.set('port', (process.env.PORT || 3000));
@@ -31,8 +22,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(methodOverride());
 
-if(check_node_env == 'prod') {
-    mongoose.connect('mongodb://chat:chat1234556@ds047166.mlab.com:47166/chat');
+if(process.env.NODE_ENV) {
+    mongoose.connect('mongodb://chat:chat123456@ds047166.mlab.com:47166/chat');
 } else {
     mongoose.connect('mongodb://localhost/chat');
 }
@@ -43,7 +34,7 @@ db.once('open', startServer);
 
 function startServer(){
 	server.listen(app.get('port'), function(){
-		console.log("Aplicação executada na porta 3000");
+		console.log("Aplicação executada na porta"+app.get('port'));
 		app.get('*', function(req, res) {
 			res.sendFile(__dirname + '/dist/index.html');
 		});
