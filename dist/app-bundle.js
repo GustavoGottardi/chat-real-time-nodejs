@@ -43909,8 +43909,7 @@
 		$authProvider.withCredentials = true;
 		$authProvider.tokenRoot = null;
 		$authProvider.cordova = false;
-		$authProvider.baseUrl = "https://lit-scrubland-52523.herokuapp.com";
-		// $authProvider.baseUrl = "http://localhost:3000";
+		$authProvider.baseUrl = window.location.origin || window.location.protocol + '//' + window.location.host;
 		$authProvider.loginUrl = '/auth/authenticate';
 		$authProvider.signupUrl = '/auth/signup';
 		$authProvider.tokenName = 'token';
