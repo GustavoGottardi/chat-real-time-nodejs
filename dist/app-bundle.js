@@ -40390,7 +40390,7 @@
 			_classCallCheck(this, HeaderController);
 	
 			var _this = this;
-			var current_url = location.href;
+			var current_url = location.host;
 			this.socket = io.connect(current_url);
 			this.$rootScope = $rootScope;
 			this.$auth = $auth;
@@ -40504,7 +40504,7 @@
 	
 			var _this = this;
 			this.$rootScope = $rootScope;
-			var current_url = location.href;
+			var current_url = location.host;
 			this.socket = io.connect(current_url);
 			this.$auth = $auth;
 			this.$state = $state;
@@ -43750,7 +43750,7 @@
 	
 			var _this = this;
 			this.$rootScope = $rootScope;
-			var current_url = location.href;
+			var current_url = location.host;
 			this.socket = io.connect(current_url);
 			this.userService = userService;
 			this.homeService = homeService;
@@ -43906,7 +43906,7 @@
 			return true;
 		};
 	
-		var current_url = location.href;
+		var current_url = location.host;
 	
 		$authProvider.withCredentials = true;
 		$authProvider.tokenRoot = null;
@@ -43995,7 +43995,7 @@
 					if (response.data.statusLogin === 200) {
 						_this.$state.go('home', { redirect: true });
 						try {
-							var current_url = location.href;
+							var current_url = location.host;
 							_this.socket = io.connect(current_url);
 							_this.userService.getCurrentUser().then(function (response) {
 								if (response.statusUser === 200) {

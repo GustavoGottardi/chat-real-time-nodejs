@@ -13,7 +13,7 @@ class LoginController {
 			if(response.data.statusLogin === 200) {
 				this.$state.go('home', { redirect : true });
 				try {
-					let current_url = location.href;
+					let current_url = location.host;
 					this.socket = io.connect(current_url);
 					this.userService.getCurrentUser().then((response) => {
 						if(response.statusUser === 200) {

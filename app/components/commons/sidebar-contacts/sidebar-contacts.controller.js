@@ -2,7 +2,7 @@ class SidebarContactsController {
 	constructor($rootScope, $auth, $state, contactsService) {
 		let _this = this;
 		this.$rootScope = $rootScope;
-		let current_url = location.href;
+		let current_url = location.host;
 		this.socket = io.connect(current_url);
 		this.$auth = $auth;
 		this.$state = $state;

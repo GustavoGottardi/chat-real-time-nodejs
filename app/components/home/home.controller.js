@@ -2,7 +2,7 @@ class HomeController {
 	constructor($rootScope, userService, homeService) {
 		let _this = this;
 		this.$rootScope = $rootScope;
-		let current_url = location.href;
+		let current_url = location.host;
 		this.socket = io.connect(current_url);
 		this.userService = userService;
 		this.homeService = homeService;

@@ -35,7 +35,7 @@ let loginModule = angular.module('login', [
 		return true;
 	};
 
-	let current_url = location.href;
+	let current_url = location.host;
 
 	$authProvider.withCredentials = true;
 	$authProvider.tokenRoot = null;
