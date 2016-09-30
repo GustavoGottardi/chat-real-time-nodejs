@@ -22,6 +22,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(methodOverride());
 
+console.log(process.env.NODE_ENV);
 if(process.env.NODE_ENV) {
     mongoose.connect('mongodb://chat:chat123456@ds047166.mlab.com:47166/chat');
 } else {
