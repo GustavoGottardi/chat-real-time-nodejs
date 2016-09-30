@@ -40390,7 +40390,8 @@
 			_classCallCheck(this, HeaderController);
 	
 			var _this = this;
-			this.socket = io.connect('http://localhost:3000');
+			var current_url = location.href;
+			this.socket = io.connect(current_url);
 			this.$rootScope = $rootScope;
 			this.$auth = $auth;
 			this.$state = $state;
@@ -40503,7 +40504,8 @@
 	
 			var _this = this;
 			this.$rootScope = $rootScope;
-			this.socket = io.connect('http://localhost:3000');
+			var current_url = location.href;
+			this.socket = io.connect(current_url);
 			this.$auth = $auth;
 			this.$state = $state;
 			this.contactsService = contactsService;
@@ -43748,7 +43750,8 @@
 	
 			var _this = this;
 			this.$rootScope = $rootScope;
-			this.socket = io.connect('http://localhost:3000');
+			var current_url = location.href;
+			this.socket = io.connect(current_url);
 			this.userService = userService;
 			this.homeService = homeService;
 			this.currentUser = {};
@@ -43903,10 +43906,12 @@
 			return true;
 		};
 	
+		var current_url = location.href;
+	
 		$authProvider.withCredentials = true;
 		$authProvider.tokenRoot = null;
 		$authProvider.cordova = false;
-		$authProvider.baseUrl = 'http://localhost:3000/';
+		$authProvider.baseUrl = current_url;
 		$authProvider.loginUrl = '/auth/authenticate';
 		$authProvider.signupUrl = '/auth/signup';
 		$authProvider.tokenName = 'token';
@@ -43990,7 +43995,8 @@
 					if (response.data.statusLogin === 200) {
 						_this.$state.go('home', { redirect: true });
 						try {
-							_this.socket = io.connect('http://localhost:3000');
+							var current_url = location.href;
+							_this.socket = io.connect(current_url);
 							_this.userService.getCurrentUser().then(function (response) {
 								if (response.statusUser === 200) {
 									_this.currentUser = response.data;

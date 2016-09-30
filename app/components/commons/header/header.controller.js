@@ -3,7 +3,8 @@ import logoImage from '../../../assets/images/logo-chat.png';
 class HeaderController {
 	constructor($rootScope, $auth, $state, userService, contactsService) {
 		let _this = this;
-		this.socket = io.connect('http://localhost:3000');
+		let current_url = location.href;
+		this.socket = io.connect(current_url);
 		this.$rootScope = $rootScope;
 		this.$auth = $auth;
 		this.$state = $state;
